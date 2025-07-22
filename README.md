@@ -2,5 +2,5 @@ Android app integrated with Firebase Cloud Messaging (FCM) to receive push notif
 Handles notifications in both background and foreground using NotificationManager.
 
 <p align="center">
-  <video src="" controls autoplay muted loop width="600"></video>
+  <video src="https://github.com/DeepakGuleria768/Push-Notification/blob/master/asset/push%20notification%20output.mp4" controls autoplay muted loop width="600"></video>
 </p>
