@@ -1,0 +1,107 @@
+
+
+Here’s a step-by-step guide on how to use Postman to send a notification via your Ktor server to your Android device:
+
+Phase 1: Preparation (Before Using Postman)
+Ensure Ktor Server is Running:
+
+Start your Ktor server application.
+
+Check its console output. You should see:
+
+Firebase Admin SDK initialized
+
+Your Server is ready to Use (if you access / endpoint)
+
+It should also be listening on http://0.0.0.0:8080.
+
+Ensure Android App is Running and Token is Registered:
+
+Run your Android application on your physical device (connected to the same Wi-Fi network as your PC) or an emulator.
+
+Check Android Studio Logcat (filter by FCM_TOKEN and SERVER_REG).
+
+You must see a successful log for token registration, like:
+
+D/FCM_TOKEN: FCM Token: YOUR_ACTUAL_DEVICE_TOKEN_HERE
+D/SERVER_REG: Token sent to server successfully: Token YOUR_ACTUAL_DEVICE_TOKEN_HERE Registration successful
+Copy this YOUR_ACTUAL_DEVICE_TOKEN_HERE string. You'll need it for Postman.
+
+Verify on the Ktor server's console that it also received and logged the token: Received Token: YOUR_ACTUAL_DEVICE_TOKEN_HERE for User Deepak Guleria.
+
+Crucial: If you're still getting network errors (ConnectException, EHOSTUNREACH) on Android, do not proceed until you've resolved those. Ensure your Android device is on the same Wi-Fi network as your PC, and that your PC's firewall is allowing connections on port 8080. Also double-check that your Android app's URL (e.g., http://192.168.1.3:8080) matches your PC's current local IP.
+
+Phase 2: Sending Notification using Postman
+Open Postman.
+
+Create a New Request:
+
+Click on the + tab to create a new request.
+
+Configure the HTTP Method and URL:
+
+Method: Select POST from the dropdown menu.
+
+URL: Enter the URL for your Ktor server's notification endpoint.
+
+If Postman is on the SAME PC as your Ktor server: http://127.0.0.1:8080/send-notification
+
+If Postman is on a DIFFERENT PC/device on the same local network: http://YOUR_PC_IP_ADDRESS:8080/send-notification
+
+(e.g., http://192.168.1.3:8080/send-notification, using the correct IP you verified earlier).
+
+Add Headers:
+
+Go to the Headers tab.
+
+Add a new key-value pair:
+
+Key: Content-Type
+
+Value: application/json
+
+Set the Request Body:
+
+Go to the Body tab.
+
+Select the raw radio button.
+
+Select JSON from the dropdown menu next to raw.
+
+Paste the following JSON into the text area:
+
+JSON
+
+{
+    "title": "Hello Deepak",
+    "body": "Sale Sale Sale",
+    "deviceToken": "YOUR_ACTUAL_DEVICE_TOKEN_HERE"
+}
+IMPORTANT: Replace "YOUR_ACTUAL_DEVICE_TOKEN_HERE" with the exact FCM token you copied from your Android Logcat in Phase 1, step 2.
+
+Send the Request:
+
+Click the blue "Send" button.
+
+Phase 3: Verify Notification Delivery
+Check Postman Response:
+
+In the Postman response area, you should see a 200 OK status.
+
+The body of the response should be Notification sent successfully! (or whatever message your Ktor server returns on success).
+
+Check Ktor Server Console:
+
+Look at the console output of your running Ktor server.
+
+You should see logs indicating the notification was sent successfully via Firebase Admin SDK, for example:
+
+Sending notification to token: YOUR_ACTUAL_DEVICE_TOKEN_HERE
+Successfully sent message: projects/your-project-id/messages/some-firebase-message-id
+Check Your Android Device:
+
+If your app is in the foreground: You should see the notification appear in the status bar and potentially a log in Logcat from your NotificationService's onMessageReceived method (D/NotificationService: Message Notification Title: Hello Deepak, etc.).
+
+If your app is in the background or killed: You should see the "Hello Deepak" notification appear directly in your device's notification shade/status bar. When you pull down the notification shade, you'll see the notification. Tapping it should open your MainActivity.
+
+If you follow these steps carefully, you should see the notification appear on your Android device!

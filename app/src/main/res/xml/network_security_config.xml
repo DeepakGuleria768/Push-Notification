@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true"><!-- This is the key line that tells Android to allow unencrypted HTTP traffic.-->
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
+
+<!-- base-Config =   Applies this rule to all domains. You could also use domain-config to apply it only
+ to specific domains/IPs if you want more control (e.g., only your Ktor server's IP).-->
+
+<!--then add this to manifest application level-->
